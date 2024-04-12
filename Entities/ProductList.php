@@ -15,13 +15,28 @@ class ProductList extends Model
         'price',
     ];
 
-    public function product()
-    {
-        $this->belongsTo(Product::class);
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
 
-    public function priceList()
-    {
-        $this->belongsTo(PriceList::class);
+    public function priceList(){
+        return $this->belongsTo(PriceList::class);
     }
+
+  public function getPriceAttribute($value)
+  {
+    $price = $value;
+
+    if ($this->relationLoaded('product') && $this->relationLoaded('priceList')) {
+      $priceList = $this->priceList;
+      $productPrice = $this->product->price;
+
+      if($priceList->criteria !== 'fixed') {
+        $price = icommercepricelist_calculatePriceByPriceList($priceList, $productPrice);
+      }
+    }
+
+    return $price;
+  }
+
 }

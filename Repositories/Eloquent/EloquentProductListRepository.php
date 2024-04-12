@@ -23,14 +23,17 @@ class EloquentProductListRepository extends EloquentBaseRepository implements Pr
             //get language translation
             $lang = \App::getLocale();
 
-            //add filter by search
-            if (isset($filter->search)) {
-                //find search in columns
-                $query->where('id', 'like', '%'.$filter->search.'%')
-                    ->orWhere('updated_at', 'like', '%'.$filter->search.'%')
-                    ->orWhere('created_at', 'like', '%'.$filter->search.'%');
-            }
-        }
+      //add filter by search
+      if (isset($filter->search)) {
+        //find search in columns
+        $query->where('id', 'like', '%' . $filter->search . '%')
+          ->orWhere('updated_at', 'like', '%' . $filter->search . '%')
+          ->orWhere('created_at', 'like', '%' . $filter->search . '%');
+      }
+
+      if (isset($filter->productId)) $query->where('product_id', $filter->productId);
+      if (isset($filter->priceListId)) $query->where('price_list_id', $filter->priceListId);
+    }
 
         /*== FIELDS ==*/
         if (isset($params->fields) && count($params->fields)) {
@@ -66,10 +69,11 @@ class EloquentProductListRepository extends EloquentBaseRepository implements Pr
         return $query->first();
     }
 
-    public function create($data)
-    {
-        $productList = $this->model->create($data);
-        event(new \Modules\Icommerce\Events\ProductListWasCreated($productList));
+  public function create($data)
+  {
+
+    $productList = $this->model->create($data);
+    event(new \Modules\Icommercepricelist\Events\ProductListWasCreated($productList));
 
         return $productList;
     }
@@ -93,10 +97,10 @@ class EloquentProductListRepository extends EloquentBaseRepository implements Pr
         // REQUEST
         $model = $query->first();
 
-        if ($model) {
-            $model->update($data);
-        }
-        event(new \Modules\Icommerce\Events\ProductListWasCreated($model->fresh()));
+    if ($model) {
+      $model->update($data);
+    }
+    event(new \Modules\Icommercepricelist\Events\ProductListWasCreated($model->fresh()));
 
         return $model;
     }
