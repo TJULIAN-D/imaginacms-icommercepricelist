@@ -1,17 +1,34 @@
 <?php
 
 return [
-    'name' => 'Icommercepricelist',
-    /**
-     * @note routeName param must be set without locale. Ex: (icommerce orders: 'icommerce.store.order.index')
-     * use **onlyShowInTheDropdownHeader** (boolean) if you want the link only appear in the dropdown in the header
-     * use **onlyShowInTheMenuOfTheIndexProfilePage** (boolean) if you want the link only appear in the dropdown in the header
-     */
-    'userMenuLinks' => [
-        [
-            'title' => 'icommercepricelist::pricelists.title.pricelists',
-            'routeName' => 'icommercepricelist.pricelists.index',
-            'icon' => 'fa fa-list',
-        ],
-    ],
+  'name' => 'Icommercepricelist',
+  /*
+   |--------------------------------------------------------------------------
+   | Configuration by google sheet template id
+   |--------------------------------------------------------------------------
+   */
+  'synchronizable' => [
+    'entities' => [
+      'icommercepricelist_syncProductlist' => [
+        'base_template_id' => '1OnBxmLWhdaQavewwAf-UlnvaWN6rI-seCnCrPOagnI0',
+        'apiRoute' => '/icommercepricelist/v3/product-lists',
+        "supportedActions" =>  ["import", "export"],
+        'sheetName' => 'Icommerce ProductList',
+        'include' => 'priceList',
+        'customColumns' => true,
+        'dependencies' => [
+          'icommercepricelist_syncPricelists' => [
+            'apiRoute' => '/icommercepricelist/v3/price-lists',
+            'sheetName' => 'Icommerce PriceList',
+            'columns' => [
+              'id' => 'ID',
+              'name' => 'NOMBRE',
+              'operationPrefix' => "OPERACION",
+              'value' => 'VALOR'
+            ]
+          ],
+        ]
+      ],
+    ]
+  ],
 ];

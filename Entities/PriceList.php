@@ -32,12 +32,15 @@ class PriceList extends Model
             ->withTimestamps();
     }
 
-    public function getEntityAttribute()
-    {
-        if ($this->related_entity && $this->related_id) {
-            return app($this->related_entity)->find($this->related_id);
-        } else {
-            return null;
-        }
-    }
+  public function getEntityAttribute()
+  {
+    if ($this->related_entity && $this->related_id)
+      return app($this->related_entity)->find($this->related_id);
+    else
+      return null;
+  }
+
+  public function related(){
+    return $this->morphTo(__FUNCTION__, 'related_entity', 'related_id');
+  }
 }
