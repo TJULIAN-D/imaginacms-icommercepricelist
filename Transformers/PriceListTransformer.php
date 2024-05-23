@@ -3,11 +3,12 @@
 namespace Modules\Icommercepricelist\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Core\Icrud\Transformers\CrudResource;
 use Modules\Icommerce\Transformers\ProductTransformer;
 
 class PriceListTransformer extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray($request)
     {
         $data = [
             'id' => $this->id,

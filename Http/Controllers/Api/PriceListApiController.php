@@ -28,7 +28,7 @@ class PriceListApiController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
         try {
             //Request to Repository
@@ -83,7 +83,7 @@ class PriceListApiController extends BaseApiController
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request): Response
+    public function create(Request $request)
     {
         \DB::beginTransaction();
         try {
@@ -116,7 +116,7 @@ class PriceListApiController extends BaseApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update($criteria, Request $request): Response
+    public function update($criteria, Request $request)
     {
         \DB::beginTransaction();
         try {
@@ -144,7 +144,7 @@ class PriceListApiController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($criteria, Request $request): Response
+    public function delete($criteria, Request $request)
     {
         \DB::beginTransaction();
         try {
