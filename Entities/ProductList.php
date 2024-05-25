@@ -2,12 +2,29 @@
 
 namespace Modules\Icommercepricelist\Entities;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Icrud\Entities\CrudModel;
 use Modules\Icommerce\Entities\Product;
 
-class ProductList extends Model
+class ProductList extends CrudModel
 {
     protected $table = 'icommercepricelist__product_lists';
+    public $transformer = 'Modules\Icommercepricelist\Transformers\ProductListTransformer';
+    public $repository = 'Modules\Icommercepricelist\Repositories\ProductListRepository';
+    public $requestValidation = [
+      'create' => 'Modules\Icommercepricelist\Http\Requests\ProductListRequest',
+      'update' => 'Modules\Icommercepricelist\Http\Requests\UpdatePriceListRequest',
+    ];
+
+    //Instance external/internal events to dispatch with extraData
+    public $dispatchesEventsWithBindings = [
+      //eg. ['path' => 'path/module/event', 'extraData' => [/*...optional*/]]
+      'created' => [],
+      'creating' => [],
+      'updated' => [],
+      'updating' => [],
+      'deleting' => [],
+      'deleted' => [],
+    ];
 
     protected $fillable = [
         'product_id',

@@ -6,42 +6,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Core\Icrud\Transformers\CrudResource;
 use Modules\Icommerce\Transformers\ProductTransformer;
 
-class PriceListTransformer extends JsonResource
+class PriceListTransformer extends CrudResource
 {
-    public function toArray($request)
+    /**
+     * Method to merge values with response
+     */
+    public function modelAttributes($request)
     {
         $data = [
-            'id' => $this->id,
-            'name' => $this->name ?? '',
-            'status' => $this->status ?? '0',
-            'criteria' => $this->when($this->criteria, $this->criteria),
-            'value' => $this->value ?? '0',
-            'operationPrefix' => $this->when($this->operation_prefix, $this->operation_prefix),
             'price' => $this->when(isset($this->pivot), $this->pivot->price ?? 0),
-            'relatedId' => $this->when($this->related_id, $this->related_id),
-            'relatedEntity' => $this->when($this->related_entity, $this->related_entity),
-            'related' => new CrudResource($this->whenLoaded('related')),
-            'products' => ProductTransformer::collection($this->whenLoaded('products')),
-            'createdAt' => $this->when($this->created_at, $this->created_at),
-            'updatedAt' => $this->when($this->updated_at, $this->updated_at),
         ];
-
-        $request->input('entity') ?
-            $data['entity'] = $this->entity : false;
-
-        $filter = json_decode($request->filter);
-
-        // Return data with available translations
-        if (isset($filter->allTranslations) && $filter->allTranslations) {
-            // Get langs avaliables
-            $languages = \LaravelLocalization::getSupportedLocales();
-
-            foreach ($languages as  $key => $value) {
-                if ($this->hasTranslation($key)) {
-                    $data[$key]['name'] = $this->translate("$key")['name'];
-                }
-            }
-        }
 
         return $data;
     }
