@@ -35,6 +35,19 @@ class EloquentPriceListRepository extends EloquentCrudRepository implements Pric
        * if (isset($filter->status)) $query->where('status', $filter->status);
        */
 
+      //add filter by search
+      if (isset($filter->search)) {
+        //get language translation
+        $lang = \App::getLocale();
+        //find search in columns
+        $query->where(function ($query) use ($filter, $lang) {
+          $query->whereHas('translations', function ($query) use ($filter, $lang) {
+            $query->where('locale', $lang)
+              ->where('name', 'like', '%' . $filter->search . '%');
+          })->orWhere('id', 'like', '%' . $filter->search . '%');
+        });
+      }
+
       //Response
       return $query;
     }

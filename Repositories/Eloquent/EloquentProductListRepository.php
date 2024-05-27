@@ -35,6 +35,14 @@ class EloquentProductListRepository extends EloquentCrudRepository implements Pr
      * if (isset($filter->status)) $query->where('status', $filter->status);
      */
 
+    //add filter by search
+    if (isset($filter->search)) {
+      //find search in columns
+      $query->where('id', 'like', '%' . $filter->search . '%')
+        ->orWhere('updated_at', 'like', '%' . $filter->search . '%')
+        ->orWhere('created_at', 'like', '%' . $filter->search . '%');
+    }
+
     //Response
     return $query;
   }
