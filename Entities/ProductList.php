@@ -28,7 +28,7 @@ class ProductList extends Model
   {
     $price = $value;
 
-    if ($this->relationLoaded('product') && $this->relationLoaded('priceList')) {
+    if ($this->relationLoaded('product') && $this->relationLoaded('priceList')  && isset($this->product) && isset($this->priceList)) {
       $priceList = $this->priceList;
       $productPrice = $this->product->price;
 
